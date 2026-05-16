@@ -9,3 +9,5 @@ dist
 .anchor/
 .claude/
 .localhome/
+logs/
+*.log
