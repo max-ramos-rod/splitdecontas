@@ -144,6 +144,16 @@ pub mod split {
             vault_amount,
         )?;
 
+        token::close_account(CpiContext::new_with_signer(
+            ctx.accounts.token_program.key(),
+            CloseAccount {
+                account: ctx.accounts.vault.to_account_info(),
+                destination: ctx.accounts.creator.to_account_info(),
+                authority: ctx.accounts.bill.to_account_info(),
+            },
+            &[seeds],
+        ))?;
+
         emit!(BillSettled { bill: bill_key, total });
         Ok(())
     }
@@ -330,6 +340,7 @@ pub struct Settle<'info> {
 
     #[account(
         mut,
+        constraint = creator_token_account.key() == bill.creator_ata @ SplitError::Unauthorized,
         constraint = creator_token_account.owner == bill.creator @ SplitError::Unauthorized,
         constraint = creator_token_account.mint == bill.token_mint @ SplitError::InvalidAmount,
     )]
