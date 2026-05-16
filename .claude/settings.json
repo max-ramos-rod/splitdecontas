@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "MultiEdit(*)",
+      "Glob(*)",
+      "LS(*)",
+
+      "Bash(npm run *)",
+      "Bash(anchor *)",
+      "Bash(solana *)",
+      "Bash(ts-node *)",
+      "Bash(node *)"
+    ],
+
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo *)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | sh)"
+    ]
+  },
+
+  "env": {
+    "DEFAULT_CLUSTER": "devnet",
+    "DEFAULT_TOKEN": "USDC"
+  },
+
+  "hooks": {
+    "PreToolUse": [],
+    "PostToolUse": []
+  },
+
+  "model": "claude-sonnet-4-6",
+
+  "projects": {
+    "SplitDeContas": {
+      "description": "Solana shared payment settlement protocol using Anchor, Solana Pay and Next.js"
+    }
+  },
+
+  "agents": {
+    "solana-agent": {
+      "description": "Handles Anchor, Rust, PDA derivation, SPL Token logic and on-chain security.",
+      "paths": [
+        "programs/",
+        "tests/"
+      ]
+    },
+
+    "frontend-agent": {
+      "description": "Handles Next.js frontend, wallet adapter integration, hydration issues and UI.",
+      "paths": [
+        "app/"
+      ]
+    },
+
+    "sdk-agent": {
+      "description": "Handles shared TypeScript SDK, transaction builders and Solana Pay helpers.",
+      "paths": [
+        "sdk/"
+      ]
+    },
+
+    "ops-agent": {
+      "description": "Handles scripts, deployment, indexing and operational tooling.",
+      "paths": [
+        "scripts/"
+      ]
+    }
+  },
+
+  "rules": {
+    "monorepo": {
+      "enforcePackageBoundaries": true,
+      "avoidCrossPackageMutation": true
+    },
+
+    "security": {
+      "neverCommitSecrets": true,
+      "requireExplicitClusterValidation": true,
+      "forbidHardcodedPrivateKeys": true
+    },
+
+    "solana": {
+      "cluster": "devnet",
+      "programAuthorityRequired": true,
+      "verifyPDASeeds": true
+    }
+  }
+}
